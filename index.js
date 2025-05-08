@@ -52,7 +52,7 @@ app.post('/submit-answer', (req, res) => {
     if (userAnswer.trim() === correctAnswer.trim()) {
       result = {
         title: 'Correct!',
-        message: 'Nice job 🎉',
+        message: 'Nice job 🎉. Next question will be ready in 5 secs! Be ready!!',
         icon: 'success'
       };
     } else {

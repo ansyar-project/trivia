@@ -61,7 +61,9 @@
             if (result.isConfirmed) {
                 // console.log("Redirecting to /get-question...");
             // Redirect to /get-question to get the next one
-            window.location.assign('/get-question');
+                setTimeout(() => {
+                window.location.assign('/get-question');
+                }, 5000);
             }
         });
     </script>
