@@ -1,6 +1,7 @@
 import express from 'express';
 import axios from 'axios';
 import bodyParser from 'body-parser';
+import he from 'he'; // For decoding HTML entities
 
 const app = express();
 const port = 3000;
@@ -22,14 +23,19 @@ app.get('/get-question', async (req, res) => {
     try {
         const response = await axios.get('https://opentdb.com/api.php?amount=1&type=multiple');
         const question = response.data.results[0];
-        currentQuestion = question.question;
+        currentQuestion = he.decode(question.question);
+        console.log(currentQuestion);
         correctAnswer = question.correct_answer;
-        console.log(correctAnswer);
+        // console.log(correctAnswer);
         question.incorrect_answers.push(correctAnswer);
         question.incorrect_answers.sort(() => Math.random() - 0.5); // Shuffle answers
+
+        for (let i = 0; i < question.incorrect_answers.length; i++) {
+            question.incorrect_answers[i] = he.decode(question.incorrect_answers[i]);
+        }
         currentAnswer = question.incorrect_answers;
         // console.log(question);
-        res.render('index', { question: question.question, answer: question.incorrect_answers});
+        res.render('index', { question: currentQuestion, answer: question.incorrect_answers});
     } catch (error) {
         console.error('Error fetching question:', error);
         res.render('index', {error: 'Try again in a few seconds!'});
@@ -39,8 +45,8 @@ app.get('/get-question', async (req, res) => {
 
 app.post('/submit-answer', (req, res) => {
     const userAnswer = req.body.answer;
-    console.log(userAnswer);
-    console.log(correctAnswer);
+    // console.log(userAnswer);
+    // console.log(correctAnswer);
   
     let result;
     if (userAnswer.trim() === correctAnswer.trim()) {
