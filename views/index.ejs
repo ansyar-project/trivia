@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trivia Game</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <header>
+        <h1>Trivia Game</h1>
+        <p>Test your knowledge with random trivia questions!</p>
+    </header>
+
+    <main>
+        <div class="quiz-card">
+            <div class="question-box">
+                <% if (!locals.question) { %>
+                <h2 id="question">Click the button to get a trivia question!</h2>
+                <form action="/get-question" method="get">
+                    <button type="submit" id="get-btn" class="get-btn" >Get Question</button>
+                </form>
+                <% } else { %>
+                <h2 id="question"><%= question %></h2>
+                <form action="/submit-answer" method="POST">
+                    <div class="options">
+                        <!-- <h3>Choose the correct answer:</h3> -->
+                        <label><input type="radio" name="answer" value="<%= `${answer[0]}`.trim() %>"> <%= answer[0] %> </label><br>
+                        <label><input type="radio" name="answer" value="<%= `${answer[1]}`.trim() %>"> <%= answer[1] %></label><br>
+                        <label><input type="radio" name="answer" value="<%= `${answer[2]}`.trim() %>"> <%= answer[2] %></label><br>
+                        <label><input type="radio" name="answer" value="<%= `${answer[3]}`.trim() %>"> <%= answer[3] %> </label><br>
+                    <div>
+                    <div class="button-row">
+                        <button class="submit-btn" type="submit">Submit Answer</button>
+                    
+                        
+                </form>
+                
+                <form action="/get-question" method="get">
+                    
+                        <button type="submit" id="get-btn" class="get-btn" >Get Another Question</button>
+                    </div>
+                </form>
+                <% } %>
+                
+            </div>
+            
+        </div>
+        
+    </main>
+    <% if (locals.result) { %>
+    <script>
+        Swal.fire({
+        title: "<%= result.title %>",
+        text: "<%= result.message %>",
+        icon: "<%= result.icon %>",
+        confirmButtonText: "OK"
+        });
+    </script>
+    <% } %>
+    <% if (locals.error) { %>
+    <script>
+        Swal.fire({
+          title: 'Too Fast!',
+          text: "<%=error%>",
+          icon: 'warning',
+          confirmButtonText: 'OK'
+        });
+      </script>
+    <% } %>
+    <!-- <script>
+        const questions = [
+            "What is the capital of France?",
+            "Who wrote 'To Kill a Mockingbird'?",
+            "What is the largest planet in our solar system?",
+            "What year did the Titanic sink?",
+            "Who painted the Mona Lisa?"
+        ];
+
+        function getQuestion() {
+            const randomIndex = Math.floor(Math.random() * questions.length);
+            document.getElementById('question').innerText = questions[randomIndex];
+        }
+    </script> -->
+    <footer class="footer">
+        <a>&copy; <%= new Date().getFullYear() %> Trivia Game. Made with 🫶🏻 in MELBOURNE.</a>
+    </footer>
+</body>
+</html>
